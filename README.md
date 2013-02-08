@@ -1,11 +1,9 @@
 text-linear
 ===========
 
+
+
 Some objects for playing around with text classification via RubyLinear (and liblinear)
-
-= text-linear
-
-Description goes here.
 
 == Contributing to text-linear
  
