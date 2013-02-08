@@ -37,4 +37,11 @@ pkg
 # Not sure what to needs to be ignored for particular editors/OSes? Here's some ideas to get you started. (Remember, remove the leading # of the line)
 #
 
+#OS X files
 .DS_Store
+
+# RVM
+.rvmrc
+
+#bundler artifacts
+Gemfile.lock
