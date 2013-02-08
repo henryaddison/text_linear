@@ -1,7 +1,7 @@
 text-linear
 ===========
 
-
+[![Build Status](https://travis-ci.org/henryaddison/text-linear.png?branch=master)](https://travis-ci.org/henryaddison/text-linear)
 
 Some objects for playing around with text classification via RubyLinear (and liblinear)
 
