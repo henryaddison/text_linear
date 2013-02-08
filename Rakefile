@@ -30,9 +30,10 @@ RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.pattern = FileList['spec/**/*_spec.rb']
 end
 
-RSpec::Core::RakeTask.new(:rcov) do |spec|
+RSpec::Core::RakeTask.new(:coverage) do |spec|
   spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+  require 'simplecov'
+  SimpleCov.start
 end
 
 task :default => :spec
