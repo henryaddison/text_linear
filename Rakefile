@@ -17,9 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "text-linear"
   gem.homepage = "http://github.com/henryaddison/text-linear"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "henry@dressipi.com"
+  gem.summary = %Q{Some objects for playing around with text classification via RubyLinear (and liblinear)}
+  gem.description = %Q{Some objects for playing around with text classification via RubyLinear (and liblinear)}
   gem.authors = ["Henry Addison"]
   # dependencies defined in Gemfile
 end
