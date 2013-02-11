@@ -1,11 +1,11 @@
-text-linear
+text_linear
 ===========
 
-[![Build Status](https://travis-ci.org/henryaddison/text-linear.png?branch=master)](https://travis-ci.org/henryaddison/text-linear)
+[![Build Status](https://travis-ci.org/henryaddison/text_linear.png?branch=master)](https://travis-ci.org/henryaddison/text_linear)
 
 Some objects for playing around with text classification via RubyLinear (and liblinear)
 
-Contributing to text-linear
+Contributing to text_linear
 == 
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.

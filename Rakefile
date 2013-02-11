@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "text-linear"
-  gem.homepage = "http://github.com/henryaddison/text-linear"
+  gem.homepage = "http://github.com/henryaddison/text_linear"
   gem.license = "MIT"
   gem.summary = %Q{Some objects for playing around with text classification via RubyLinear (and liblinear)}
   gem.description = %Q{Some objects for playing around with text classification via RubyLinear (and liblinear)}
