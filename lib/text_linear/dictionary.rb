@@ -1,5 +1,6 @@
 module TextLinear
   class Dictionary
+    class DirtyRead < RuntimeError; end
     attr_reader :words, :filepath
 
     def initialize fp
@@ -16,6 +17,7 @@ module TextLinear
     end
 
     def [] word
+      raise DirtyRead, "trying to read from a dictionary which has not been saved." if dirty?
       words[word]
     end
 

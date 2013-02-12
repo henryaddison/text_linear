@@ -56,6 +56,13 @@ describe TextLinear::Dictionary do
       subject["not included word"].should be_nil
       subject["included word"].should == 0
     end
+
+    context 'when dictionary is dirty' do
+      it 'should throw an error' do
+        subject << "another word"
+        expect { subject["anything"] }.to raise_error(TextLinear::Dictionary::DirtyRead)
+      end
+    end
   end
 
   describe "#save" do
