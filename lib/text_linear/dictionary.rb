@@ -7,8 +7,8 @@ module TextLinear
       @filepath = fp
     end
 
-    def << word
-      words[word] = nil unless words.has_key?(word)
+    def << word, index = nil
+      words[word] = index unless words.has_key?(word)
     end
 
     def save
@@ -18,6 +18,18 @@ module TextLinear
           f.puts w
           words[w] = index
           index+=1
+        end
+      end
+    end
+
+    class << self
+      def load fp
+        (new fp).tap do |obj|
+          index = 0
+          File.foreach(fp) do |line|
+            obj.<<(line.chomp, index)
+            index += 1
+          end
         end
       end
     end
