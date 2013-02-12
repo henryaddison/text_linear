@@ -15,7 +15,7 @@ describe TextLinear::Datum do
   end
 
   describe '#translated_features' do
-    let(:dictionary) { TextLinear::Dictionary.load(File.join(File.dirname(__FILE__), '..', 'support', 'dictionaries', 'spec.dictionary')) }
+    let(:dictionary) { load_dictionary('spec.dictionary') }
     it 'should convert a word-based features to numeric ones' do
       subject.translated_features(dictionary).should == {2 => 1, 0 => 1, 1 => 1}
     end

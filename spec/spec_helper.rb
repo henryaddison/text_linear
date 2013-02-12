@@ -14,3 +14,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 RSpec.configure do |config|
   
 end
+
+def load_dictionary(name)
+  TextLinear::Dictionary.load(File.join(File.dirname(__FILE__), 'support', 'dictionaries', name))
+end
