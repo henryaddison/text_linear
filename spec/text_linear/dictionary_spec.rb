@@ -37,6 +37,18 @@ describe TextLinear::Dictionary do
     end
   end
 
+  describe "#[]" do
+    before(:each) do
+      subject << "included word"
+      subject.save
+    end
+
+    it 'returns index of word' do
+      subject["not included word"].should be_nil
+      subject["included word"].should == 0
+    end
+  end
+
   describe "#save" do
     before(:each) do
       subject << "word1"

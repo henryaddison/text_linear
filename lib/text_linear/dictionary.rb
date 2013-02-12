@@ -11,6 +11,10 @@ module TextLinear
       words[word] = index unless words.has_key?(word)
     end
 
+    def [] word
+      words[word]
+    end
+
     def save
       index = 0
       File.open(@filepath, 'w+') do |f|
