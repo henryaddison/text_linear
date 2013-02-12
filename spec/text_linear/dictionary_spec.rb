@@ -20,6 +20,10 @@ describe TextLinear::Dictionary do
     it 'should have a filepath' do
       subject.filepath.should == filepath
     end
+
+    it 'should not be dirty' do
+      subject.dirty?.should be_false
+    end
   end
 
   describe "#<<" do
@@ -27,6 +31,11 @@ describe TextLinear::Dictionary do
       subject << "word"
       subject.words.should have_key("word")
       subject.words["word"].should be_nil
+    end
+
+    it 'should dirty the dictionary' do
+      expect { subject << "word" }.to change(subject, :dirty?) 
+      subject.dirty?.should be_true
     end
 
     context 'with overriding index arg' do
@@ -64,22 +73,46 @@ describe TextLinear::Dictionary do
     it 'writes a file' do
       File.read(filepath).should == "word1\nword2\n"
     end
+
+    it 'marks the dictionary clean' do
+      subject.should_not be_dirty
+    end
   end
 
-  describe '.load' do
+  context 'load' do
     let(:factory_dictionary_filepath) { File.join(File.dirname(__FILE__), '..', 'support', 'dictionaries', 'spec.dictionary') }
     before(:all) { FileUtils.cp(factory_dictionary_filepath, filepath) }
-    subject do
-      TextLinear::Dictionary.load filepath
+
+    shared_examples "loaded dictionary" do
+      it 'should load a dictionary from the filepath' do
+        subject.words.should == {
+          'some' => 0,
+          'words' => 1,
+          'for' => 2,
+          'specs' => 3
+        }
+      end
+
+      it 'loaded dictionary should not be dirty' do
+        subject.should_not be_dirty
+      end
     end
 
-    it 'should load a dictionary from the filepath' do
-      subject.words.should == {
-        'some' => 0,
-        'words' => 1,
-        'for' => 2,
-        'specs' => 3
-      }
+    describe 'class method' do
+      subject do
+        TextLinear::Dictionary.load filepath
+      end
+
+      it_should_behave_like "loaded dictionary"
+    end
+
+    describe 'instance method' do
+      subject do
+        obj = TextLinear::Dictionary.new filepath
+        obj.reload
+        obj
+      end
+      it_should_behave_like "loaded dictionary"
     end
   end
 end

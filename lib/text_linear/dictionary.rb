@@ -5,14 +5,22 @@ module TextLinear
     def initialize fp
       @words = {}
       @filepath = fp
+      @dirty = false
     end
 
     def << word, index = nil
-      words[word] = index unless words.has_key?(word)
+      unless words.has_key?(word)
+        words[word] = index
+        @dirty = true
+      end
     end
 
     def [] word
       words[word]
+    end
+
+    def dirty?
+      @dirty
     end
 
     def save
@@ -24,16 +32,23 @@ module TextLinear
           index+=1
         end
       end
+      @dirty = false
+    end
+
+    def reload
+      @words = {}
+      index = 0
+      File.foreach(@filepath) do |line|
+        self.<<(line.chomp, index)
+        index += 1
+      end
+      @dirty = false
     end
 
     class << self
       def load fp
         (new fp).tap do |obj|
-          index = 0
-          File.foreach(fp) do |line|
-            obj.<<(line.chomp, index)
-            index += 1
-          end
+          obj.reload
         end
       end
     end
