@@ -13,5 +13,13 @@ module TextLinear
         @dictionary << term
       end
     end
+
+    def labels
+      data.collect(&:label)
+    end
+
+    def samples
+      data.collect { |d| d.translated_features(dictionary) }
+    end
   end
 end

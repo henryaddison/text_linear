@@ -32,4 +32,30 @@ describe TextLinear::Dataset do
       dictionary.words['item'].should be_nil
     end
   end
+
+  context 'problem' do
+    before(:each) do
+      subject.add('label1', {'cotton' => 1, 'mix' => 1})
+      subject.add('label2', {'silk' => 1})
+      subject.add('label1', {'cotton' => 1, 'blend' => 1})
+      dictionary.save
+    end
+
+    describe '#labels' do
+      it 'should list the labels in order' do
+        subject.labels.should == ['label1', 'label2', 'label1']
+      end
+    end
+
+    describe '#samples' do
+      it 'should list the translated samples' do
+        subject.samples.should == [
+          {4 => 1, 5 => 1},
+          {6 => 1},
+          {4 => 1, 7 => 1}
+        ]
+      end
+    end
+
+  end
 end
