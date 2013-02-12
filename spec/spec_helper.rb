@@ -16,5 +16,10 @@ RSpec.configure do |config|
 end
 
 def load_dictionary(name)
-  TextLinear::Dictionary.load(File.join(File.dirname(__FILE__), 'support', 'dictionaries', name))
+  factory_dictionary_filepath = File.join(File.dirname(__FILE__), 'support', 'dictionaries', name)
+  tmp_dictionary_filepath = File.join(File.dirname(__FILE__), '..', 'tmp', 'dictionaries', name)
+  # copy the fixture dictionary to prevent tests permanently overwriting it
+  FileUtils.mkdir_p(File.dirname(tmp_dictionary_filepath))
+  FileUtils.cp(factory_dictionary_filepath, tmp_dictionary_filepath)
+  TextLinear::Dictionary.load(tmp_dictionary_filepath)
 end
