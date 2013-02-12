@@ -6,5 +6,14 @@ module TextLinear
       @label = label
       @features = features
     end
+
+    def translated_features(dictionary)
+      @features.inject({}) do |translated, (feature, weight)|
+        if translation = dictionary[feature]
+          translated[translation] = weight
+        end
+        translated
+      end
+    end
   end
 end
