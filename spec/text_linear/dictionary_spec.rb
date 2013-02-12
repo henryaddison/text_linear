@@ -122,4 +122,11 @@ describe TextLinear::Dictionary do
       it_should_behave_like "loaded dictionary"
     end
   end
+
+  describe '#size' do
+    subject { TextLinear::Dictionary.load filepath }
+    it 'should return number of words in dictionary' do
+      subject.size.should == 4
+    end
+  end
 end

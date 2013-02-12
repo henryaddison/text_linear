@@ -25,6 +25,10 @@ module TextLinear
       @dirty
     end
 
+    def size
+      words.size
+    end
+
     def save
       index = 0
       File.open(@filepath, 'w+') do |f|
