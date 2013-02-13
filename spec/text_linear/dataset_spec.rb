@@ -16,16 +16,16 @@ describe TextLinear::Dataset do
   describe '#add' do
     let(:features) { {'for' => 1, 'specs' => 1, 'items' => 1} }
     let(:label) { 1 }
-
+    let(:datum) { TextLinear::Datum.new(label, features) }
     it 'should add a datum to data' do
-      expect { subject.add(label, features) }.to change(subject.data, :size).by(1)
+      expect { subject.add(datum) }.to change(subject.data, :size).by(1)
       d = subject.data.last
       d.features.should == features
       d.label.should == label
     end
 
     it 'should add the words to the dictionary' do
-      expect { subject.add(label, features) }.to change(dictionary.words, :size).by(1)
+      expect { subject.add(TextLinear::Datum.new(label, features)) }.to change(dictionary.words, :size).by(1)
       features.keys.each do |word|
         dictionary.words.should have_key(word)
       end
@@ -35,9 +35,9 @@ describe TextLinear::Dataset do
 
   context 'RubyLinear problem' do
     before(:each) do
-      subject.add(1, {'cotton' => 1, 'mix' => 1})
-      subject.add(2, {'silk' => 1})
-      subject.add(1, {'cotton' => 1, 'blend' => 1})
+      subject.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
+      subject.add(TextLinear::Datum.new(2, {'silk' => 1}))
+      subject.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
       dictionary.save
     end
 

@@ -9,9 +9,9 @@ module TextLinear
       @dictionary = dictionary
     end
 
-    def add(label, features)
-      @data << Datum.new(label, features)
-      features.each_key do |term|
+    def add(datum)
+      @data << datum
+      datum.features.each_key do |term|
         @dictionary << term
       end
     end
