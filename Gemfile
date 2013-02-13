@@ -3,6 +3,8 @@ source "http://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
+gem 'ruby_linear', :git => 'https://github.com/fcheung/rubylinear.git'#, :require => nil
+
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do

@@ -1,3 +1,5 @@
+require 'ruby_linear'
+
 module TextLinear
   class Dataset
     attr_reader :data, :dictionary
@@ -20,6 +22,10 @@ module TextLinear
 
     def samples
       data.collect { |d| d.translated_features(dictionary) }
+    end
+
+    def to_problem(bias)
+      RubyLinear::Problem.new(labels, samples, bias, dictionary.size)
     end
   end
 end

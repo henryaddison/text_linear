@@ -57,5 +57,10 @@ describe TextLinear::Dataset do
       end
     end
 
+    describe '#to_problem' do
+      it 'should form a liblinear problem' do
+        subject.to_problem(1.0).class.should == RubyLinear::Problem
+      end
+    end
   end
 end
