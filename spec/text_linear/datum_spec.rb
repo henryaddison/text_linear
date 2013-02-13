@@ -35,4 +35,16 @@ describe TextLinear::Datum do
       }
     end
   end
+
+  describe '.build_features' do
+    it 'should split sentence and create hash with weight' do
+      sentence = "how now brown cow"
+      TextLinear::Datum.build_features(sentence, 0.75).should == {
+        'how' => 0.75,
+        'now' => 0.75,
+        'brown' => 0.75,
+        'cow' => 0.75
+      }
+    end
+  end
 end
