@@ -15,5 +15,16 @@ module TextLinear
         translated
       end
     end
+
+    class << self
+      def from_string label, string, weight
+        features = {}.tap do |fhash|
+          TextLinear::StringTokeniser.tokenise(string).each do |word|
+            fhash[word] = weight
+          end
+        end
+        new label, features
+      end
+    end
   end
 end

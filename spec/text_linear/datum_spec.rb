@@ -20,4 +20,19 @@ describe TextLinear::Datum do
       subject.translated_features(dictionary).should == {2 => 1, 0 => 1, 1 => 1}
     end
   end
+
+  describe '.from_string' do
+    let(:string) { "Some words to tokenize"}
+    let(:weight) { 0.5 }
+    subject { TextLinear::Datum.from_string label, string, weight }
+    it 'should create a datum with words from string' do
+      subject.label.should == 1
+      subject.features.should == {
+        'some' => 0.5,
+        'words' => 0.5,
+        'to' => 0.5,
+        'tokenize' => 0.5
+      }
+    end
+  end
 end
