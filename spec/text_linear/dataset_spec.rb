@@ -15,7 +15,7 @@ describe TextLinear::Dataset do
 
   describe '#add' do
     let(:features) { {'for' => 1, 'specs' => 1, 'items' => 1} }
-    let(:label) { "label" }
+    let(:label) { 1 }
 
     it 'should add a datum to data' do
       expect { subject.add(label, features) }.to change(subject.data, :size).by(1)
@@ -33,17 +33,17 @@ describe TextLinear::Dataset do
     end
   end
 
-  context 'problem' do
+  context 'RubyLinear problem' do
     before(:each) do
-      subject.add('label1', {'cotton' => 1, 'mix' => 1})
-      subject.add('label2', {'silk' => 1})
-      subject.add('label1', {'cotton' => 1, 'blend' => 1})
+      subject.add(1, {'cotton' => 1, 'mix' => 1})
+      subject.add(2, {'silk' => 1})
+      subject.add(1, {'cotton' => 1, 'blend' => 1})
       dictionary.save
     end
 
     describe '#labels' do
       it 'should list the labels in order' do
-        subject.labels.should == ['label1', 'label2', 'label1']
+        subject.labels.should == [1,2,1]
       end
     end
 

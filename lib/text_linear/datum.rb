@@ -3,7 +3,7 @@ module TextLinear
     attr_reader :label, :features
 
     def initialize label, features
-      @label = label
+      @label = label.to_i
       @features = features
     end
 

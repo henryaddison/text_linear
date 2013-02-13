@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe TextLinear::Datum do
-  let(:label) { 'label1' }
+  let(:label) { 1 }
   let(:features) do
     {'for' => 1, 'you' => 1, 'some' => 1, 'words' => 1}
   end
