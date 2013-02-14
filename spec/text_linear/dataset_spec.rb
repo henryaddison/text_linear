@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe TextLinear::Dataset do
   let(:dictionary) { load_dictionary('spec.dictionary') }
-  subject { TextLinear::Dataset.new dictionary }
+  let(:ds) { TextLinear::Dataset.new dictionary }
+  subject { ds }
   describe '#new' do
     it 'should have an empty data' do
       subject.data.should be_empty
@@ -61,6 +62,21 @@ describe TextLinear::Dataset do
       it 'should form a liblinear problem' do
         subject.to_problem(1.0).class.should == RubyLinear::Problem
       end
+    end
+  end
+
+  describe '#build_dictionary' do
+    before(:each) do
+      ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
+      ds.add(TextLinear::Datum.new(2, {'silk' => 1}))
+      ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
+    end
+
+    subject { ds.build_dictionary }
+
+    it 'should build a dictionary from the data in the set' do
+      subject.should be_a(TextLinear::Dictionary)
+      subject.words.keys.should =~ ['cotton', 'mix', 'silk', 'blend']
     end
   end
 end

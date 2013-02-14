@@ -27,5 +27,15 @@ module TextLinear
     def to_problem(bias)
       RubyLinear::Problem.new(labels, samples, bias, dictionary.size)
     end
+
+    def build_dictionary
+      dict = TextLinear::Dictionary.new
+      data.each do |datum|
+        datum.features.each_key do |term|
+          dict << term
+        end
+      end
+      return dict
+    end
   end
 end
