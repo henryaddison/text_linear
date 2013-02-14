@@ -31,6 +31,7 @@ module TextLinear
     def save fp=nil
       self.filepath = fp if fp
       index = 0
+      raise "cannot save - no filepath yet provided" unless filepath
       File.open(filepath, 'w+') do |f|
         words.keys.each do |w|
           f.puts w
@@ -45,6 +46,7 @@ module TextLinear
       self.filepath = fp if fp
       @words = {}
       index = 0
+      raise "cannot load - no filepath yet provided" unless filepath
       File.foreach(filepath) do |line|
         self.<<(line.chomp, index)
         index += 1

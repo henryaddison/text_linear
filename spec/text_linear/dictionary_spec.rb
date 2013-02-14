@@ -81,7 +81,7 @@ describe TextLinear::Dictionary do
 
     context 'without filepath provided' do
       it 'should raise an error' do
-        dictionary.save
+        expect { dictionary.save }.to raise_error(RuntimeError)
       end
     end
 
@@ -118,8 +118,6 @@ describe TextLinear::Dictionary do
 
       it_should_behave_like "saved dictionary"
     end
-
-    
   end
 
   context 'load' do
@@ -152,7 +150,7 @@ describe TextLinear::Dictionary do
     describe 'instance method' do
       context 'with no filepath provided' do
         it 'should raise an error' do
-          @dictionary.reload
+          expect { @dictionary.reload }.to raise_error(RuntimeError)
         end
       end
 
