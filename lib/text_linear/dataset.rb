@@ -4,16 +4,12 @@ module TextLinear
   class Dataset
     attr_reader :data, :dictionary
 
-    def initialize dictionary
+    def initialize
       @data = []
-      @dictionary = dictionary
     end
 
     def add(datum)
       @data << datum
-      datum.features.each_key do |term|
-        @dictionary << term
-      end
     end
 
     def labels
@@ -28,14 +24,14 @@ module TextLinear
       RubyLinear::Problem.new(labels, samples, bias, dictionary.size)
     end
 
-    def build_dictionary
-      dict = TextLinear::Dictionary.new
+    def update_dictionary
+      @dictionary ||= TextLinear::Dictionary.new
       data.each do |datum|
         datum.features.each_key do |term|
-          dict << term
+          @dictionary << term
         end
       end
-      return dict
+      return @dictionary
     end
   end
 end

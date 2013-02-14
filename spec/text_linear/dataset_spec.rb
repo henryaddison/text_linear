@@ -2,15 +2,15 @@ require 'spec_helper'
 
 describe TextLinear::Dataset do
   let(:dictionary) { load_dictionary('spec.dictionary') }
-  let(:ds) { TextLinear::Dataset.new dictionary }
+  let(:ds) { TextLinear::Dataset.new }
   subject { ds }
   describe '#new' do
     it 'should have an empty data' do
       subject.data.should be_empty
     end
 
-    it 'should have a dictionary' do
-      subject.dictionary.should == dictionary
+    it 'should not have a dictionary' do
+      subject.dictionary.should be_nil
     end
   end
 
@@ -23,14 +23,6 @@ describe TextLinear::Dataset do
       d = subject.data.last
       d.features.should == features
       d.label.should == label
-    end
-
-    it 'should add the words to the dictionary' do
-      expect { subject.add(TextLinear::Datum.new(label, features)) }.to change(dictionary.words, :size).by(1)
-      features.keys.each do |word|
-        dictionary.words.should have_key(word)
-      end
-      dictionary.words['item'].should be_nil
     end
   end
 
@@ -65,17 +57,18 @@ describe TextLinear::Dataset do
     end
   end
 
-  describe '#build_dictionary' do
+  describe '#update_dictionary' do
     before(:each) do
       ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
       ds.add(TextLinear::Datum.new(2, {'silk' => 1}))
       ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
     end
 
-    subject { ds.build_dictionary }
+    subject { ds.update_dictionary }
 
     it 'should build a dictionary from the data in the set' do
       subject.should be_a(TextLinear::Dictionary)
+      subject.should == ds.dictionary
       subject.words.keys.should =~ ['cotton', 'mix', 'silk', 'blend']
     end
   end
