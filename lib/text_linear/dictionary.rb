@@ -2,10 +2,9 @@ module TextLinear
   class Dictionary
     class DirtyRead < RuntimeError; end
     attr_reader :words, :filepath
-
-    def initialize fp
+    attr_writer :filepath
+    def initialize
       @words = {}
-      @filepath = fp
       @dirty = false
     end
 
@@ -29,9 +28,10 @@ module TextLinear
       words.size
     end
 
-    def save
+    def save fp=nil
+      self.filepath = fp if fp
       index = 0
-      File.open(@filepath, 'w+') do |f|
+      File.open(filepath, 'w+') do |f|
         words.keys.each do |w|
           f.puts w
           words[w] = index
@@ -41,10 +41,11 @@ module TextLinear
       @dirty = false
     end
 
-    def reload
+    def reload fp=nil
+      self.filepath = fp if fp
       @words = {}
       index = 0
-      File.foreach(@filepath) do |line|
+      File.foreach(filepath) do |line|
         self.<<(line.chomp, index)
         index += 1
       end
@@ -53,8 +54,8 @@ module TextLinear
 
     class << self
       def load fp
-        (new fp).tap do |obj|
-          obj.reload
+        (new).tap do |obj|
+          obj.reload fp
         end
       end
     end

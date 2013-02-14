@@ -1,89 +1,125 @@
 require 'spec_helper'
 
 describe TextLinear::Dictionary do
-  let(:filepath) { File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries', 'text.dictionary') }
+  let(:tmp_dictionary_dir) { File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries') }
+  let(:filepath) { File.join(tmp_dictionary_dir, 'text.dictionary') }
+
   before(:all) do
-    FileUtils.mkdir_p File.dirname(filepath)
+    FileUtils.mkdir_p tmp_dictionary_dir
   end
 
   after(:all) do
-    FileUtils.rm_rf File.dirname(filepath)
+    FileUtils.rm_rf tmp_dictionary_dir
   end
   
-  subject { TextLinear::Dictionary.new filepath }
+  def dictionary
+    @dictionary
+  end
+
+  before(:each) do
+    @dictionary = TextLinear::Dictionary.new
+  end
 
   describe "#new" do
     it "has an empty bag of words" do
-      subject.words.should == {}
+      dictionary.words.should == {}
     end
 
-    it 'should have a filepath' do
-      subject.filepath.should == filepath
+    it 'should not have a filepath' do
+      dictionary.filepath.should be_nil
     end
 
     it 'should not be dirty' do
-      subject.dirty?.should be_false
+      dictionary.dirty?.should be_false
     end
   end
 
   describe "#<<" do
     it 'adds a word' do
-      subject << "word"
-      subject.words.should have_key("word")
-      subject.words["word"].should be_nil
+      dictionary << "word"
+      dictionary.words.should have_key("word")
+      dictionary.words["word"].should be_nil
     end
 
     it 'should dirty the dictionary' do
-      expect { subject << "word" }.to change(subject, :dirty?) 
-      subject.dirty?.should be_true
+      expect { dictionary << "word" }.to change(dictionary, :dirty?) 
+      dictionary.dirty?.should be_true
     end
 
     context 'with overriding index arg' do
       it 'adds word and set index' do
-        subject.<< "word", 3
-        subject.words["word"].should == 3
+        dictionary.<< "word", 3
+        dictionary.words["word"].should == 3
       end
     end
   end
 
   describe "#[]" do
     before(:each) do
-      subject << "included word"
-      subject.save
+      dictionary << "included word"
+      dictionary.save filepath
     end
 
     it 'returns index of word' do
-      subject["not included word"].should be_nil
-      subject["included word"].should == 0
+      dictionary["not included word"].should be_nil
+      dictionary["included word"].should == 0
     end
 
     context 'when dictionary is dirty' do
       it 'should throw an error' do
-        subject << "another word"
-        expect { subject["anything"] }.to raise_error(TextLinear::Dictionary::DirtyRead)
+        dictionary << "another word"
+        expect { dictionary["anything"] }.to raise_error(TextLinear::Dictionary::DirtyRead)
       end
     end
   end
 
   describe "#save" do
     before(:each) do
-      subject << "word1"
-      subject << "word2"
-      subject.save
+      dictionary << "word1"
+      dictionary << "word2"
     end
 
-    it 'assigns integers to words' do
-      subject.words["word1"].should == 0
-      subject.words["word2"].should == 1
+    context 'without filepath provided' do
+      it 'should raise an error' do
+        dictionary.save
+      end
     end
 
-    it 'writes a file' do
-      File.read(filepath).should == "word1\nword2\n"
+    shared_examples "saved dictionary" do
+      it 'assigns integers to words' do
+        dictionary.words["word1"].should == 0
+        dictionary.words["word2"].should == 1
+      end
+
+      it 'writes a file' do
+        File.read(filepath).should == "word1\nword2\n"
+      end
+
+      it 'marks the dictionary clean' do
+        dictionary.should_not be_dirty
+      end
     end
 
-    it 'marks the dictionary clean' do
-      subject.should_not be_dirty
+    context 'with earlier supplied filepath' do
+      let(:filepath) { File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries', 'earlier.dictionary') }
+      before(:each) do
+        dictionary.filepath = filepath
+        dictionary.save
+      end
+
+      it_should_behave_like "saved dictionary"
     end
+
+    context 'with filepath provided' do
+      let(:filepath) { File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries', 'later.dictionary') }
+      before(:each) do
+        dictionary.save filepath
+      end
+
+      it_should_behave_like "saved dictionary"
+    end
+
+    
   end
 
   context 'load' do
@@ -114,12 +150,31 @@ describe TextLinear::Dictionary do
     end
 
     describe 'instance method' do
-      subject do
-        obj = TextLinear::Dictionary.new filepath
-        obj.reload
-        obj
+      context 'with no filepath provided' do
+        it 'should raise an error' do
+          @dictionary.reload
+        end
       end
-      it_should_behave_like "loaded dictionary"
+
+      context 'with filepath provided' do
+        subject do
+          obj = TextLinear::Dictionary.new
+          obj.reload filepath
+          obj
+        end
+        it_should_behave_like "loaded dictionary"
+      end
+
+      context 'with filepath provided earlier' do
+        subject do
+          obj = TextLinear::Dictionary.new
+          obj.filepath = filepath
+          obj.reload
+          obj
+        end
+        it_should_behave_like "loaded dictionary"
+      end
+
     end
   end
 
