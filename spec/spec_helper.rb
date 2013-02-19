@@ -11,8 +11,16 @@ require 'text_linear'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
+TMP_DICTIONARY_DIR = File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries')
+
 RSpec.configure do |config|
-  
+  config.before(:all) do
+    FileUtils.mkdir_p TMP_DICTIONARY_DIR
+  end
+
+  config.after(:all) do
+    FileUtils.rm_rf TMP_DICTIONARY_DIR
+  end
 end
 
 def load_dictionary(name)

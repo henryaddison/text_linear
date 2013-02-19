@@ -1,16 +1,7 @@
 require 'spec_helper'
 
 describe TextLinear::Dictionary do
-  let(:tmp_dictionary_dir) { File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries') }
-  let(:filepath) { File.join(tmp_dictionary_dir, 'text.dictionary') }
-
-  before(:all) do
-    FileUtils.mkdir_p tmp_dictionary_dir
-  end
-
-  after(:all) do
-    FileUtils.rm_rf tmp_dictionary_dir
-  end
+  let(:filepath) { File.join(TMP_DICTIONARY_DIR, 'text.dictionary') }
   
   def dictionary
     @dictionary
@@ -101,7 +92,7 @@ describe TextLinear::Dictionary do
     end
 
     context 'with earlier supplied filepath' do
-      let(:filepath) { File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries', 'earlier.dictionary') }
+      let(:filepath) { File.join(TMP_DICTIONARY_DIR, 'earlier.dictionary') }
       before(:each) do
         dictionary.filepath = filepath
         dictionary.save
@@ -111,7 +102,7 @@ describe TextLinear::Dictionary do
     end
 
     context 'with filepath provided' do
-      let(:filepath) { File.join(File.dirname(__FILE__), '..', '..', 'tmp', 'dictionaries', 'later.dictionary') }
+      let(:filepath) { File.join(TMP_DICTIONARY_DIR, 'later.dictionary') }
       before(:each) do
         dictionary.save filepath
       end

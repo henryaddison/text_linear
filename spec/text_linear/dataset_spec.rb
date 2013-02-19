@@ -1,16 +1,11 @@
 require 'spec_helper'
 
 describe TextLinear::Dataset do
-  let(:dictionary) { load_dictionary('spec.dictionary') }
   let(:ds) { TextLinear::Dataset.new }
   subject { ds }
   describe '#new' do
     it 'should have an empty data' do
       subject.data.should be_empty
-    end
-
-    it 'should not have a dictionary' do
-      subject.dictionary.should be_nil
     end
   end
 
@@ -31,7 +26,8 @@ describe TextLinear::Dataset do
       subject.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
       subject.add(TextLinear::Datum.new(2, {'silk' => 1}))
       subject.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
-      dictionary.save
+      @dictionary = subject.build_dictionary
+      @dictionary.save File.join(TMP_DICTIONARY_DIR, 'spec.dictionary')
     end
 
     describe '#labels' do
@@ -42,33 +38,32 @@ describe TextLinear::Dataset do
 
     describe '#samples' do
       it 'should list the translated samples' do
-        subject.samples.should == [
-          {4 => 1, 5 => 1},
-          {6 => 1},
-          {4 => 1, 7 => 1}
+        subject.samples(@dictionary).should == [
+          {0 => 1, 1 => 1},
+          {2 => 1},
+          {0 => 1, 3 => 1}
         ]
       end
     end
 
     describe '#to_problem' do
       it 'should form a liblinear problem' do
-        subject.to_problem(1.0).class.should == RubyLinear::Problem
+        subject.to_problem(@dictionary, 1.0).class.should == RubyLinear::Problem
       end
     end
   end
 
-  describe '#update_dictionary' do
+  describe '#build_dictionary' do
     before(:each) do
       ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
       ds.add(TextLinear::Datum.new(2, {'silk' => 1}))
       ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
     end
 
-    subject { ds.update_dictionary }
+    subject { ds.build_dictionary }
 
     it 'should build a dictionary from the data in the set' do
       subject.should be_a(TextLinear::Dictionary)
-      subject.should == ds.dictionary
       subject.words.keys.should =~ ['cotton', 'mix', 'silk', 'blend']
     end
   end

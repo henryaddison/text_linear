@@ -2,7 +2,7 @@ require 'ruby_linear'
 
 module TextLinear
   class Dataset
-    attr_reader :data, :dictionary
+    attr_reader :data
 
     def initialize
       @data = []
@@ -16,22 +16,22 @@ module TextLinear
       data.collect(&:label)
     end
 
-    def samples
+    def samples(dictionary)
       data.collect { |d| d.translated_features(dictionary) }
     end
 
-    def to_problem(bias)
-      RubyLinear::Problem.new(labels, samples, bias, dictionary.size)
+    def to_problem(dictionary, bias)
+      RubyLinear::Problem.new(labels, samples(dictionary), bias, dictionary.size)
     end
 
-    def update_dictionary
-      @dictionary ||= TextLinear::Dictionary.new
+    def build_dictionary
+      dictionary = TextLinear::Dictionary.new
       data.each do |datum|
         datum.features.each_key do |term|
-          @dictionary << term
+          dictionary << term
         end
       end
-      return @dictionary
+      return dictionary
     end
   end
 end
