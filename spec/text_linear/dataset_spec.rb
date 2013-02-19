@@ -77,4 +77,14 @@ describe TextLinear::Dataset do
       subject.words.keys.should =~ ['cotton', 'mix', 'silk', 'blend']
     end
   end
+
+  describe '#build_model' do
+    before(:each) do
+      @dictionary = setup_dataset_with_dictionary(ds)
+    end
+
+    it 'should build a liblinear model' do
+      ds.build_model(@dictionary, 1).class.should == RubyLinear::Model
+    end
+  end
 end
