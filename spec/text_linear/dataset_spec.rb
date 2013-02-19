@@ -1,6 +1,22 @@
 require 'spec_helper'
 
 describe TextLinear::Dataset do
+  def setup_dataset(dataset)
+    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
+    dataset.add(TextLinear::Datum.new(2, {'silk' => 1}))
+    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
+
+  end
+
+  def setup_dataset_with_dictionary(dataset)
+    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
+    dataset.add(TextLinear::Datum.new(2, {'silk' => 1}))
+    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
+    dictionary = subject.build_dictionary
+    dictionary.save File.join(TMP_DICTIONARY_DIR, 'spec.dictionary')
+    dictionary
+  end
+
   let(:ds) { TextLinear::Dataset.new }
   subject { ds }
   describe '#new' do
@@ -23,11 +39,7 @@ describe TextLinear::Dataset do
 
   context 'RubyLinear problem' do
     before(:each) do
-      subject.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
-      subject.add(TextLinear::Datum.new(2, {'silk' => 1}))
-      subject.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
-      @dictionary = subject.build_dictionary
-      @dictionary.save File.join(TMP_DICTIONARY_DIR, 'spec.dictionary')
+      @dictionary = setup_dataset_with_dictionary(subject)
     end
 
     describe '#labels' do
@@ -55,9 +67,7 @@ describe TextLinear::Dataset do
 
   describe '#build_dictionary' do
     before(:each) do
-      ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
-      ds.add(TextLinear::Datum.new(2, {'silk' => 1}))
-      ds.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
+      setup_dataset(ds)
     end
 
     subject { ds.build_dictionary }
