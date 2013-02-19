@@ -2,16 +2,13 @@ require 'spec_helper'
 
 describe TextLinear::Dataset do
   def setup_dataset(dataset)
-    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
-    dataset.add(TextLinear::Datum.new(2, {'silk' => 1}))
-    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
-
+    dataset.add(TextLinear::Example.new({'cotton' => 1, 'mix' => 1}, 1))
+    dataset.add(TextLinear::Example.new({'silk' => 1}, 2))
+    dataset.add(TextLinear::Example.new({'cotton' => 1, 'blend' => 1}, 1))
   end
 
   def setup_dataset_with_dictionary(dataset)
-    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'mix' => 1}))
-    dataset.add(TextLinear::Datum.new(2, {'silk' => 1}))
-    dataset.add(TextLinear::Datum.new(1, {'cotton' => 1, 'blend' => 1}))
+    setup_dataset(dataset)
     dictionary = subject.build_dictionary
     dictionary.save File.join(TMP_DICTIONARY_DIR, 'spec.dictionary')
     dictionary
@@ -28,7 +25,7 @@ describe TextLinear::Dataset do
   describe '#add' do
     let(:features) { {'for' => 1, 'specs' => 1, 'items' => 1} }
     let(:label) { 1 }
-    let(:datum) { TextLinear::Datum.new(label, features) }
+    let(:datum) { TextLinear::Example.new(features, label) }
     it 'should add a datum to data' do
       expect { subject.add(datum) }.to change(subject.data, :size).by(1)
       d = subject.data.last
