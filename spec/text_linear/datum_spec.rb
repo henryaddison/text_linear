@@ -60,12 +60,13 @@ describe TextLinear::Datum do
       dictionary
     end
 
-    let(:model) do 
+    let(:model) do
       dataset.build_model(dictionary, 1)
     end
 
     it 'should return a label' do
-      TextLinear::Datum.new({'cotton' => 1, 'mix' => 1}).predict(model, dictionary).should satisfy { |v| [1,2].include?(v) }
+      d = TextLinear::Datum.new({'cotton' => 1, 'mix' => 1})
+      d.predict(model, dictionary).should satisfy { |v| [1,2].include?(v) }
     end
   end
 end
