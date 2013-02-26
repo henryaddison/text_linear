@@ -21,11 +21,13 @@ module TextLinear
     end
 
     def to_problem(dictionary, bias)
-      RubyLinear::Problem.new(labels, samples(dictionary), bias, dictionary.size)
+      s = samples(dictionary)
+      RubyLinear::Problem.new(labels, s, bias, dictionary.size)
     end
 
     def build_model(dictionary, bias)
-      model = RubyLinear::Model.new(to_problem(dictionary, bias), :solver => RubyLinear::L1R_L2LOSS_SVC)
+      problem = to_problem(dictionary, bias)
+      RubyLinear::Model.new(problem, :solver => RubyLinear::L2R_L1LOSS_SVC_DUAL)
     end
 
     def build_dictionary
