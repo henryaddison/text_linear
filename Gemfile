@@ -14,4 +14,5 @@ group :development do
   gem "jeweler", "~> 1.8.4"
   gem "simplecov", ">= 0"
   gem "redcarpet"
+  gem "debugger"
 end
